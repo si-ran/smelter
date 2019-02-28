@@ -1,6 +1,6 @@
 package com.neo.sk.smelter.front.pages
 
-import com.neo.sk.smelter.front.{Index, Routes}
+import com.neo.sk.smelter.front.{Page, Routes}
 import com.neo.sk.smelter.front.utils.{Http, JsFunc, TimeTool}
 import com.neo.sk.smelter.shared.ptcl.SuccessRsp
 import com.neo.sk.smelter.shared.ptcl.ToDoListProtocol.{AddRecordReq, DelRecordReq, GetListRsp}
@@ -8,7 +8,6 @@ import mhtml._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import io.circe.parser._
-import com.neo.sk.smelter.front.styles.ListStyles._
 import org.scalajs.dom
 import org.scalajs.dom.html.Input
 
@@ -16,11 +15,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
   * Created by haoshuhan on 2018/6/4.
   */
-class TaskList(username: String) extends Index{
+class TaskList(username: String) extends Page{
+
+  override val pageUrl: String = "#/List"
+
   val taskList = Var(List.empty[(String, Long)])
   var inputValue = ""
 
-  def getDeleteButton(record: String, time: Long) =  <button class={deleteButton.htmlClass} onclick={()=>deleteRecord(record, time)}>删除</button>
+  def getDeleteButton(record: String, time: Long) =  <button onclick={()=>deleteRecord(record, time)}>删除</button>
 
   def addRecord: Unit = {
     val data = AddRecordReq(inputValue).asJson.noSpaces
@@ -76,15 +78,15 @@ class TaskList(username: String) extends Index{
     case list => <div style ="margin: 20px; font-size: 17px;">
       <table>
         <tr>
-          <th class={th.htmlClass}>任务</th>
-          <th class={th.htmlClass}>创建时间</th>
-          <th class={th.htmlClass}>操作</th>
+          <th>任务</th>
+          <th>创建时间</th>
+          <th>操作</th>
         </tr>
         {list.map {l =>
         <tr>
-          <td class={td.htmlClass}>{l._1}</td>
-          <td class={td.htmlClass}>{TimeTool.dateFormatDefault(l._2)}</td>
-          <td class={td.htmlClass}>{getDeleteButton(l._1, l._2)}</td>
+          <td>{l._1}</td>
+          <td>{TimeTool.dateFormatDefault(l._2)}</td>
+          <td>{getDeleteButton(l._1, l._2)}</td>
         </tr>
       }
         }
@@ -110,15 +112,15 @@ class TaskList(username: String) extends Index{
     }
   }
 
-  def app: xml.Node = {
+  override def render: xml.Elem = {
    getList
   <div>
     <div>
-      <button class={logoutButton.htmlClass} onclick={()=>logout()}>退出</button></div>
+      <button onclick={()=>logout()}>退出</button></div>
     <div style="margin:30px;font-size:25px;">任务记录</div>
     <div style="margin-left:30px;">
-      <input class={input.htmlClass} onchange={(e: dom.Event) => inputValue = e.target.asInstanceOf[Input].value}></input>
-    <button class={addButton.htmlClass} onclick={()=>addRecord}>+添加</button>
+      <input onchange={(e: dom.Event) => inputValue = e.target.asInstanceOf[Input].value}></input>
+    <button onclick={()=>addRecord}>+添加</button>
     </div>
     {taskListRx}
   </div>

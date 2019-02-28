@@ -38,12 +38,12 @@ object PageSwitcher extends PageSwitcher{
   }
 
   override def switchPageByHash(): Unit = {
-    println("PageSwitcher.switchPageByHash: " + getCurrentHash)
+//    println("PageSwitcher.switchPageByHash: " + getCurrentHash)
     currentPageHash := hashStr2Seq(getCurrentHash).toList
   }
 
   dom.window.onhashchange = { _: Event =>
-    println("PageSwitcher.onhashchange: " + getCurrentHash)
+//    println("PageSwitcher.onhashchange: " + getCurrentHash)
     switchPageByHash()
   }
 

@@ -35,14 +35,13 @@ lazy val frontend = (project in file("frontend"))
       Seq(
         fullOptJS,
         fastOptJS,
-        scalaJSUseMainModuleInitializer,
         packageJSDependencies,
         packageMinifiedJSDependencies
       ).map(f => (crossTarget in f) ~= (_ / "sjsout"))
     ))
   .settings(skip in packageJSDependencies := false)
   .settings(
-    scalaJSUseMainModuleInitializer := true,
+    scalaJSUseMainModuleInitializer := false,
     //mainClass := Some("com.neo.sk.virgour.front.Main"),
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core" % "0.9.2" withSources(),
